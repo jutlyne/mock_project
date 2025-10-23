@@ -1,0 +1,17 @@
+<%= form_with model: @user, url: password_reset_update_path, method: :patch, data: { turbo: false } do |f| %>
+  <p>Set a new password for your account</p>
+  
+  <div data-mdb-input-init class="form-outline mb-4">
+      <%= f.password_field :password, class: "form-control", id: "inputPassword", placeholder: "New Password", required: true %>
+      <%= f.label :password, "New Password", class: "form-label", for: "inputPassword" %>
+  </div>
+
+  <div data-mdb-input-init class="form-outline mb-4">
+      <%= f.password_field :password_confirmation, class: "form-control", id: "inputConfirm", placeholder: "Confirm New Password", required: true %>
+      <%= f.label :password_confirmation, "Confirm Password", class: "form-label", for: "inputConfirm" %>
+  </div>
+
+  <div class="text-center pt-1 mb-5 pb-1">
+      <%= f.button "Reset Password", type: "submit", class: "btn btn-success btn-block fa-lg gradient-custom-2 mb-3" %>
+  </div>
+<% end %>

@@ -1,0 +1,19 @@
+<%= form_with url: login_path, method: :post, data: { turbo: false } do %>
+  <p>Please login to your account</p>
+
+  <div data-mdb-input-init class="form-outline mb-4">
+    <%= email_field_tag :email, nil, class: "form-control", id: "username", aria: { describedby: "emailHelp" }, placeholder: "Email address" %>
+    <%= label_tag :email, "Email", class: "form-label", for: "username" %>
+  </div>
+
+  <div data-mdb-input-init class="form-outline mb-4">
+    <%= password_field_tag :password, nil, class: "form-control", id: "password" %>
+    <%= label_tag :email, "Password", class: "form-label", for: "password" %>
+  </div>
+
+  <div class="text-center pt-1 mb-5 pb-1">
+    <%= submit_tag "Đăng nhập", class: "btn btn-primary mt-2 d-none", id: 'buttonSubmit' %>
+    <%= button_tag "Log in", type: "submit", class: "btn btn-primary btn-block fa-lg gradient-custom-2 mb-3", id: 'buttonLogin', data: { mdb_button_init: true, mdb_ripple_init: true } %>
+    <%= link_to "Forgot password?", reset_password_form_path, class: "text-muted" %>
+  </div>
+<% end %>

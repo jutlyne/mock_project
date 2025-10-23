@@ -1,0 +1,11 @@
+<nav
+    class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown no-arrow">
+            <%= link_to logout_path, data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to log out?" }, class: "dropdown-item" do %>
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                Logout
+            <% end %>
+        </li>
+    </ul>
+</nav>

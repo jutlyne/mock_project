@@ -1,0 +1,18 @@
+<%= form_with url: check_password_reset_path, method: :post, data: { turbo: false } do %>
+  <p>Please enter the verification code (PIN) sent to your email</p>
+
+  <div data-mdb-input-init class="form-outline mb-4">
+    <%= number_field_tag :pin, nil, class: "form-control", id: "inputPin", placeholder: "6-digit PIN code", required: true, maxlength: 6 %>
+    <%= label_tag :pin, "Verification Code (PIN)", class: "form-label", for: "inputPin" %>
+  </div>
+
+  <div class="text-center pt-1 mb-1">
+    <%= button_tag "Verify Code", type: "submit", class: "btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" %>
+  </div>
+<% end %>
+
+<div class="text-center pt-1 pb-1">
+  <%= form_with url: send_reset_password_path, method: :post, data: { turbo: true }, class: "d-inline" do %>
+    <%= button_tag "Resend code", type: "submit", class: "btn-link text-muted p-0 border-0 bg-transparent" %>
+  <% end %>
+</div>
