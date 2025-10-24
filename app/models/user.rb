@@ -4,7 +4,7 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :email,
             presence: true,
-            format: { with: URI::MailTo::EMAIL_REGEXP, message: "Email không đúng định dạng" }
+            format: { with: URI::MailTo::EMAIL_REGEXP, message: "Email invalid" }
   validate :email_must_be_unique
 
   def generate_and_save_reset_pin
@@ -23,7 +23,7 @@ class User < ApplicationRecord
   end
 
   def send_password_reset_email(pin)
-    UserMailer.password_reset_pin(self, pin).deliver_now
+    UserMailer.password_reset_pin(self, pin).deliver_later
   end
 
   private

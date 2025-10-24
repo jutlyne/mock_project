@@ -4,17 +4,24 @@ class SessionsController < ApplicationController
   before_action :redirect_if_logged_in, only: [:new, :create]
 
   def new
+    @login_form = LoginForm.new
   end
 
   def create
-    user = User.find_by(email: params[:email])
-    
-    if user&.authenticate(params[:password])
-      session[:user_id] = user.id
-      redirect_to users_path, notice: "Logged in successfully!"
+    @login_form = LoginForm.new(login_form_params)
+    if @login_form.valid?
+      user = User.find_by(email: @login_form.email.downcase)
+      
+      if user&.authenticate(@login_form.password)
+        session[:user_id] = user.id
+        redirect_to users_path, notice: "Logged in successfully!"
+      else
+        flash.now[:alert] = "Invalid email or password."
+        render :new
+      end
     else
-      flash.now[:alert] = "Invalid email or password."
-      render :new
+      flash.now[:error] = @login_form.errors.full_messages.first
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -104,5 +111,9 @@ class SessionsController < ApplicationController
 
   def user_params
     params.require(:user).permit(:password, :password_confirmation)
+  end
+
+  def login_form_params
+    params.require(:login_form).permit(:email, :password)
   end
 end
