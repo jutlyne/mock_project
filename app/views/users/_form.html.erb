@@ -1,0 +1,33 @@
+<%= form_with(model: [@user], local: true, html: { multipart: true }) do |form| %>
+  <div data-mdb-input-init class="form-outline mb-4">
+    <%= form.text_field :name, class: 'form-control', autocomplete: 'off' %>
+    <%= form.label :name, class: 'form-label' %>
+  </div>
+
+  <div data-mdb-input-init class="form-outline mb-4">
+    <%= form.text_field :email, class: 'form-control', autocomplete: 'off' %>
+    <%= form.label :email, class: 'form-label' %>
+  </div>
+
+  <div data-mdb-input-init class="form-outline mb-4">
+    <%= form.password_field :password, class: 'form-control', autocomplete: 'off' %>
+    <%= form.label :password, class: 'form-label' %>
+  </div>
+
+  <div data-mdb-input-init class="form-outline mb-4">
+    <%= form.select :team_id,
+      options_from_collection_for_select(@teams, :id, :name, @user.team_id),
+      { prompt: "Open this select menu" },
+      { class: "form-select", "aria-label" => "Default select example" }
+    %>
+  </div>
+
+  <div class="input-group mb-3">
+    <%= form.file_field :avatar, class: "form-control" %>
+  </div>
+
+  <div>
+    <button data-mdb-ripple-init type="button" id='buttonLogin' class="btn btn-primary btn-block mb-4">Save</button>
+    <%= form.submit "Save", class: "btn btn-primary mt-2 d-none", id: 'buttonSubmit' %>
+  </div>
+<% end %>

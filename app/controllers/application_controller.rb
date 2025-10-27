@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
 
   def require_login
     unless current_user
-      redirect_to login_path, alert: "Bạn phải đăng nhập trước."
+      redirect_to login_path, alert: "You must log in first."
     end
   end
 end

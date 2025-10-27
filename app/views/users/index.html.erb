@@ -32,7 +32,26 @@
                 <td><%= user.name %></td>
                 <td><%= user.email %></td>
                 <td><%= user.id %></td>
-                <td><%= user.avatar %></td>
+                
+                <td>
+                  <% if user.persisted? && user.avatar.attached? %>
+                    <%= image_tag(
+                        user.avatar.variant(resize_to_limit: [180, 180]),
+                        class: "card-img-top",
+                        alt: user.name,
+                        style: "width: 60px; object-fit: cover;"
+                      )
+                    %>
+                  <% else %>
+                    <%= image_tag(
+                        "/icon.png",
+                        class: "card-img-top",
+                        alt: "No image available",
+                        style: "width: 60px; object-fit: cover;"
+                      )
+                    %>
+                  <% end %>
+                </td>
                 <td class="d-flex gap-2">
                   <%= link_to "Edit", edit_user_path(user), class: "btn btn-sm btn-primary" %>
                   <%= button_to "Delete", user_path(user), method: :delete,

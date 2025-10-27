@@ -20,4 +20,16 @@ User.create!(
 
 puts "✅ Đã tạo #{User.count} User."
 
+Team.destroy_all
+
+puts "👥 Tạo các Team..."
+
+5.times do |i|
+  Team.create!(
+    name: "Team #{i + 1}",
+  )
+end
+
+puts "✅ Đã tạo #{Team.count} Teams."
+
 puts "🎉 Hoàn thành quá trình Seeding!"
