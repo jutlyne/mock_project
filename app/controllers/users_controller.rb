@@ -3,7 +3,11 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[ edit update destroy ]
 
   def index
-    @users = User.all 
+    @users = User
+      .yield_self do |relation|
+        params[:title].present? ? relation.where("name LIKE ?", "%#{params[:title]}%") : relation
+      end
+      .includes(:team)
   end
 
   def new
@@ -51,7 +55,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    permitted = params.require(:user).permit(:name, :password, :email, :avatar)
+    permitted = params.require(:user).permit(:name, :password, :email, :avatar, :team_id)
     if permitted[:password].blank?
       permitted.delete(:password)
     end

@@ -1,0 +1,51 @@
+<% content_for :style do %>
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+<% end %>
+
+<div class="container-fluid">
+  <h1 class="h3 mb-2 text-gray-800">List Team</h1>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+    </div>
+    <div class="card-body">
+      <%= form_with url: teams_path, method: :get, class: "d-flex" do |form| %>
+        <div class="input-group mb-2">
+          <%= form.text_field :title, value: params[:title], class: 'form-control rounded', placeholder: 'Search', aria: { label: 'Search' } %>
+          <button class="btn btn-primary px-4" type="submit">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+      <% end %>
+      <%= link_to new_team_path, class: "d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mb-2" do %>
+        <i class="fa-solid fa-plus fa-sm text-white-50"></i>
+        <span>Create</span>
+      <% end %>
+      <div class="table-responsive">
+        <table class="table table-bordered" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th style='width: 10%;'>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @teams.each do |team| %>
+              <tr>
+                <td><%= team.id %></td>
+                <td><%= team.name %></td>
+                <td class="d-flex gap-2">
+                  <%= link_to "Edit", edit_team_path(team), class: "btn btn-sm btn-primary" %>
+                  <%= button_to "Delete", team_path(team), method: :delete,
+                        data: { turbo_confirm: "Are you sure?" },
+                        class: "btn btn-sm btn-danger" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

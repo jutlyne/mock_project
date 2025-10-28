@@ -9,6 +9,15 @@
     <div class="card-header py-3">
     </div>
     <div class="card-body">
+      <%= form_with url: users_path, method: :get, class: "d-flex" do |form| %>
+        <div class="input-group mb-2">
+          <%= form.text_field :title, value: params[:title], class: 'form-control rounded', placeholder: 'Search', aria: { label: 'Search' } %>
+          <button class="btn btn-primary px-4" type="submit">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+      <% end %>
+
       <%= link_to new_user_path, class: "d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mb-2" do %>
         <i class="fa-solid fa-plus fa-sm text-white-50"></i>
         <span>Create</span>
@@ -31,7 +40,13 @@
                 <td><%= user.id %></td>
                 <td><%= user.name %></td>
                 <td><%= user.email %></td>
-                <td><%= user.id %></td>
+                <td>
+                  <% if user.team.present? %>
+                    <%= user.team.name %>
+                  <% else %>
+                    --
+                  <% end %>
+                </td>
                 
                 <td>
                   <% if user.persisted? && user.avatar.attached? %>

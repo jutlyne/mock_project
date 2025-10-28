@@ -12,8 +12,12 @@
 
     <li class="nav-item active">
         <%= link_to users_path, class: "nav-link" do %>
-            <i class="fa-solid fa-users"></i>
+            <i class="fa-solid fa-user"></i>
             <span>Users</span>
+        <% end %>
+        <%= link_to teams_path, class: "nav-link" do %>
+            <i class="fa-solid fa-users"></i>
+            <span>Teams</span>
         <% end %>
     </li>
 
