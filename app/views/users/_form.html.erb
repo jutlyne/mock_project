@@ -1,4 +1,16 @@
-<%= form_with(model: [@user], local: true, html: { multipart: true }) do |form| %>
+<% flash.each do |key, message| %>
+<div class="alert alert-danger" role="alert">
+  <%= message %>
+</div>
+<% end %>
+
+<%
+  user = @user_form.user
+  form_url = user.persisted? ? user_path(user) : users_path
+  form_method = user.persisted? ? :patch : :post
+%>
+
+<%= form_with(model: @user_form, url: form_url, method: form_method, local: true, html: { multipart: true }) do |form| %>
   <div data-mdb-input-init class="form-outline mb-4">
     <%= form.text_field :name, class: 'form-control', autocomplete: 'off' %>
     <%= form.label :name, class: 'form-label' %>
@@ -16,7 +28,7 @@
 
   <div data-mdb-input-init class="form-outline mb-4">
     <%= form.select :team_id,
-      options_from_collection_for_select(@teams, :id, :name, @user.team_id),
+      options_from_collection_for_select(@teams, :id, :name, @user_form.team_id),
       { prompt: "Open this select menu" },
       { class: "form-select", "aria-label" => "Default select example" }
     %>

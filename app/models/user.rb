@@ -4,13 +4,6 @@ class User < ApplicationRecord
 
   belongs_to :team, optional: true
 
-  validates :name, presence: true
-  validates :email,
-    presence: true,
-    format: { with: URI::MailTo::EMAIL_REGEXP, message: "Email invalid" }
-  validate :email_must_be_unique
-  # validates :avatar, content_type: ['image/png', 'image/jpg', 'image/jpeg'], size: { less_than: 5.megabytes , message: 'kích thước phải nhỏ hơn 5MB' }, allow_nil: true
-
   def generate_and_save_reset_pin
     pin = rand(100000..999999) 
     
@@ -28,14 +21,5 @@ class User < ApplicationRecord
 
   def send_password_reset_email(pin)
     UserMailer.password_reset_pin(self, pin).deliver_later
-  end
-
-  private
-
-  def email_must_be_unique
-    existing_user = User.find_by(email: email)
-    if existing_user && existing_user.id != id
-      errors.add(:email, "đã tồn tại")
-    end
   end
 end

@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :require_login
   before_action :set_user, only: %i[ edit update destroy ]
+  before_action :set_teams, only: %i[ new edit create ] 
 
   def index
     @users = User
@@ -11,37 +12,42 @@ class UsersController < ApplicationController
   end
 
   def new
-    @user = User.new
-    @teams = Team.all
+    @user_form = UserForm.new({})
   end
 
   def create
-    @user = User.new(user_params)
-
+    @user_form = UserForm.new(user_params)
+    
     respond_to do |format|
-      if @user.save
+      if @user_form.save 
+        @user = @user_form.user 
         format.html { redirect_to users_path, notice: "Create successful users." }
       else
+        flash.now[:error] = @user_form.errors.full_messages.first
         format.html { render :new, status: :unprocessable_entity }
       end
     end
   end
 
   def edit
-    @teams = Team.all
+    @user_form = UserForm.new({}, @user)
   end
 
   def update
-    if @user.update(user_params)
-      redirect_to users_path, notice: "Updated successfully."
-    else
-      render :edit, status: :unprocessable_entity
+    @user_form = UserForm.new(user_params, @user)
+    
+    respond_to do |format|
+      if @user_form.update
+        format.html { redirect_to users_path, notice: "Updated successfully." }
+      else
+        flash.now[:error] = @user_form.errors.full_messages.first
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 
   def destroy
     @user.destroy!
-
     respond_to do |format|
       format.html { redirect_to users_path, notice: "User deleted successfully." }
       format.json { head :no_content }
@@ -50,20 +56,15 @@ class UsersController < ApplicationController
 
   private
 
+  def set_teams
+    @teams = Team.all
+  end
+
   def set_user
     @user = User.find(params[:id])
   end
 
   def user_params
-    permitted = params.require(:user).permit(:name, :password, :email, :avatar, :team_id)
-    if permitted[:password].blank?
-      permitted.delete(:password)
-    end
-    
-    if permitted[:avatar].blank?
-      permitted.delete(:avatar)
-    end
-    
-    permitted
+    params.require(:user_form).permit(:name, :password, :email, :avatar, :team_id)
   end
 end
