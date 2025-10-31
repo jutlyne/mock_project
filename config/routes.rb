@@ -25,7 +25,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  get '*unmatched_route', to: 'sessions#new', as: 'catch_all', 
+  get '*unmatched_route', to: 'users#redirect_to_index', as: 'catch_all', 
   constraints: lambda { |req| 
     req.path.exclude?('/rails') 
   }

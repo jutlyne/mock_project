@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :require_login
   before_action :set_user, only: %i[ edit update destroy ]
-  before_action :set_teams, only: %i[ new edit create ] 
+  before_action :set_teams, only: %i[ new edit create update ] 
 
   def index
     @users = User
@@ -52,6 +52,10 @@ class UsersController < ApplicationController
       format.html { redirect_to users_path, notice: "User deleted successfully." }
       format.json { head :no_content }
     end
+  end
+
+  def redirect_to_index
+    redirect_to users_path, status: :moved_permanently 
   end
 
   private

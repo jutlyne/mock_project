@@ -1,4 +1,16 @@
-<%= form_with(model: [@team], local: true, html: { multipart: true }) do |form| %>
+<% flash.each do |key, message| %>
+  <div class="alert alert-danger" role="alert">
+    <%= message %>
+  </div>
+<% end %>
+
+<%
+  team = @team_form.team
+  form_url = team.persisted? ? team_path(team) : teams_path
+  form_method = team.persisted? ? :patch : :post
+%>
+
+<%= form_with(model: @team_form, url: form_url, method: form_method, local: true, html: { multipart: true }) do |form| %>
   <div data-mdb-input-init class="form-outline mb-4">
     <%= form.text_field :name, class: 'form-control', autocomplete: 'off' %>
     <%= form.label :name, class: 'form-label' %>

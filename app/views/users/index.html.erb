@@ -7,6 +7,11 @@
 
   <div class="card shadow mb-4">
     <div class="card-header py-3">
+      <% flash.each do |key, message| %>
+        <div class="alert alert-danger" role="alert">
+          <%= message %>
+        </div>
+      <% end %>
     </div>
     <div class="card-body">
       <%= form_with url: users_path, method: :get, class: "d-flex" do |form| %>

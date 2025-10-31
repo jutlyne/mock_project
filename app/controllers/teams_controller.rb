@@ -11,29 +11,36 @@ class TeamsController < ApplicationController
   end
 
   def new
-    @team = Team.new
+    @team_form = TeamForm.new({})
   end
 
   def create
-    @team = Team.new(team_params)
+    @team_form = TeamForm.new(team_params)
 
     respond_to do |format|
-      if @team.save
+      if @team_form.save
         format.html { redirect_to teams_path, notice: "Create successful teams." }
       else
+        flash.now[:error] = @team_form.errors.full_messages.first
         format.html { render :new, status: :unprocessable_entity }
       end
     end
   end
 
   def edit
+    @team_form = TeamForm.new({}, @team)
   end
 
   def update
-    if @team.update(team_params)
-      redirect_to teams_path, notice: "Updated successfully."
-    else
-      render :edit, status: :unprocessable_entity
+    @team_form = TeamForm.new(team_params, @team)
+
+    respond_to do |format|
+      if @team_form.update
+        format.html { redirect_to teams_path, notice: "Updated successfully." }
+      else
+        flash.now[:error] = @team_form.errors.full_messages.first
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -53,7 +60,6 @@ class TeamsController < ApplicationController
   end
 
   def team_params
-    permitted = params.require(:team).permit(:name)
-    permitted
+    params.require(:team_form).permit(:name)
   end
 end
