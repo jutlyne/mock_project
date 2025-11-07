@@ -1,7 +1,7 @@
 class UserForm
   include ActiveModel::Model
   
-  attr_accessor :name, :email, :password, :avatar, :team_id
+  attr_accessor :name, :email, :password, :avatar, :team_id, :role
 
   validates :name, 
     presence: { message: " can't be blank." },
@@ -54,6 +54,7 @@ class UserForm
       'email'    => email,
       'password' => password,
       'avatar'   => avatar,
+      'role'     => role,
       'team_id'  => team_id
     }.stringify_keys
   end

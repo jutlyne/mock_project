@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
+  include Pundit::Authorization
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   allow_browser versions: :modern
 
-  # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
   helper_method :current_user
@@ -15,5 +15,12 @@ class ApplicationController < ActionController::Base
     unless current_user
       redirect_to login_path, alert: "You must log in first."
     end
+  end
+
+  private
+
+  def user_not_authorized
+    flash[:alert] = "You do not have permission to perform this action."
+    redirect_back(fallback_location: teams_path)
   end
 end

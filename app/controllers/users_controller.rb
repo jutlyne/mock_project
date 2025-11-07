@@ -4,18 +4,24 @@ class UsersController < ApplicationController
   before_action :set_teams, only: %i[ new edit create update ] 
 
   def index
-    @users = User
+    @users = policy_scope(User)
       .yield_self do |relation|
         params[:title].present? ? relation.where("name LIKE ?", "%#{params[:title]}%") : relation
       end
       .includes(:team)
+
+    authorize @users
   end
 
   def new
+    authorize User
+
     @user_form = UserForm.new({})
   end
 
   def create
+    authorize User
+
     @user_form = UserForm.new(user_params)
     
     respond_to do |format|
@@ -30,10 +36,14 @@ class UsersController < ApplicationController
   end
 
   def edit
+    authorize @user
+
     @user_form = UserForm.new({}, @user)
   end
 
   def update
+    authorize @user
+
     @user_form = UserForm.new(user_params, @user)
     
     respond_to do |format|
@@ -47,6 +57,8 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    authorize @user
+
     @user.destroy!
     respond_to do |format|
       format.html { redirect_to users_path, notice: "User deleted successfully." }
@@ -69,6 +81,14 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user_form).permit(:name, :password, :email, :avatar, :team_id)
+    permitted_params = params.require(:user_form).permit(:name, :password, :email, :avatar, :team_id)
+
+    if current_user.super_admin?
+      permitted_params = params.require(:user_form).permit(:name, :password, :email, :avatar, :team_id, :role)
+    elsif !current_user.super_admin? && params.dig(:user_form, :role).present?
+      permitted_params.delete(:role)
+    end
+    
+    permitted_params
   end
 end

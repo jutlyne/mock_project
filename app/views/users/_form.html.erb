@@ -34,6 +34,22 @@
     %>
   </div>
 
+  <% if current_user.super_admin? %>
+    <div data-mdb-input-init class="form-outline mb-4">
+      <%= form.select :role, 
+        User.roles.keys.map { |r| [r.humanize, r] }, 
+        { 
+          prompt: "Select User Role",
+          selected: @user_form.role.presence || @user_form.user.try(:role) 
+        },
+        
+        { class: "form-select", "aria-label" => "Select Role" }
+      %>
+    </div>
+  <% elsif @user_form.user.persisted? %>
+    <%= form.hidden_field :role, value: @user_form.user.role %>
+  <% end %>
+
   <div class="input-group mb-3">
     <%= form.file_field :avatar, class: "form-control" %>
   </div>
